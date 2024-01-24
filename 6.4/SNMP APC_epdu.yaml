@@ -1,0 +1,809 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: b7cb8d3a4fbd4782818ccd42e734110a
+      template: 'APC ePDU by SNMP'
+      name: 'APC ePDU by SNMP'
+      description: 'Creado por Lucas Alvarez, con algunas partes extraídas de las plantillas oficiales de APC: github.com/lucas-strummer'
+      groups:
+        - name: Templates
+      items:
+        - uuid: 20984a73a5624a14bd00d06779636737
+          name: 'PowerNet-MIB::ePDUDeviceStatusTableSize'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.318.1.1.30.1.0
+          key: '.1.3.6.1.4.1.318.1.1.30.1.0.[{#SNMPINDEX}]'
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: FLOAT
+          description: 'The total number of Easy PDUs'
+          tags:
+            - tag: Application
+              value: APC_ePDU
+        - uuid: f0cad42c75324271b4cb51be715621ca
+          name: 'PowerNet-MIB::ePDUPhaseTableSize'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.318.1.1.30.3.0
+          key: '.1.3.6.1.4.1.318.1.1.30.3.0.[{#SNMPINDEX}]'
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: FLOAT
+          description: 'The number of connected Easy PDU phases'
+          tags:
+            - tag: Application
+              value: APC_ePDU
+        - uuid: 67cf2af25e2b4447bd422b5ca6e62f62
+          name: 'PowerNet-MIB::ePDUOutletTableSize'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.318.1.1.30.5.0
+          key: '.1.3.6.1.4.1.318.1.1.30.5.0.[{#SNMPINDEX}]'
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: FLOAT
+          description: 'The number of switched outlets on connected Easy PDUs.'
+          tags:
+            - tag: Application
+              value: APC_ePDU
+        - uuid: 023514225bf94b4f98207071a9e6cce2
+          name: 'PowerNet-MIB::ePDUSensorTableSize'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.318.1.1.30.7.0
+          key: '.1.3.6.1.4.1.318.1.1.30.7.0.[{#SNMPINDEX}]'
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: FLOAT
+          description: 'The number of connected temperature-humidity sensors'
+          tags:
+            - tag: Application
+              value: APC_ePDU
+      discovery_rules:
+        - uuid: f6fdc4d60fbd4136b4d3086dc49856c2
+          name: 'PowerNet-MIB::ePDUDeviceStatusTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4,{#EPDUDEVICESTATUSMODULE},.1.3.6.1.4.1.318.1.1.30.2.1.1.2]'
+          key: .1.3.6.1.4.1.318.1.1.30.2.1
+          delay: 5m
+          description: 'A table of Easy PDU status information'
+          item_prototypes:
+            - uuid: 0aab91e296d941a781adfe284a623719
+              name: 'PowerNet-MIB::ePDUDeviceStatusModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The user-defined Rack PDU numeric ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 8489ae4244404b4493280491cf61c6d4
+              name: 'PowerNet-MIB::ePDUDeviceStatusVersion[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: TEXT
+              description: 'The Easy PDU firmware and hardware version'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 1aeb8670eaf14e4f9afe156ede4866d2
+              name: 'PowerNet-MIB::ePDUDeviceStatusModelNumber[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: TEXT
+              description: 'The Easy PDU model number'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 331ce1258d7a4e58bc3cab15ca7fa4a9
+              name: 'PowerNet-MIB::ePDUDeviceStatusSerialNumber[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.5.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.5.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: TEXT
+              description: 'The Easy PDU serial number'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: cfc3ee10d39c4bdc8a48bf7d18acd640
+              name: 'PowerNet-MIB::ePDUDeviceStatusNumPhases[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.6.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.6.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The number of phases present in the Easy PDU'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: b364569985d842b18afe64c01f1f427c
+              name: 'PowerNet-MIB::ePDUDeviceStatusActivePower[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.7.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.7.[{#SNMPINDEX}]'
+              delay: 5m
+              history: 14d
+              value_type: FLOAT
+              units: W
+              description: |
+                Indicates the PDU Active Power. Units:1 Watt.
+                 Models that do not support this feature, will respond to this OID
+                 with a value of notSupported (-1).
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '1'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 54aad35ac176433aafff1e59ccef00ae
+              name: 'PowerNet-MIB::ePDUDeviceStatusReactivePower[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.8.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.8.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Indicates the PDU Reactive Power. Units:1 Var.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 9a34460eb92d4d89994e03ea131518c2
+              name: 'PowerNet-MIB::ePDUDeviceStatusApparentPower[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.9.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.9.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Indicates the PDU Apparent Power. Units:1 VA.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 6bb2cc8fa7f7436ea58a710861a23d4f
+              name: 'PowerNet-MIB::ePDUDeviceStatusPowerFactor[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.10.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.10.[{#SNMPINDEX}]'
+              delay: 5m
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: |
+                Indicates the PDU Power Factor. Units:0.1%.
+                 Models that do not support this feature, will respond to this OID
+                 with a value of notSupported (-1).
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: bc77574548b0465395b7b6b1211228e0
+              name: 'PowerNet-MIB::ePDUDeviceStatusEnergy[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.11.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.11.[{#SNMPINDEX}]'
+              delay: 5m
+              history: 2w
+              value_type: FLOAT
+              units: kWh
+              description: |
+                Indicates the PDU Energy. Units:1 Wh.
+                 Models that do not support this feature, will respond to this OID
+                 with a value of notSupported (-1).
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 86ebf821e2384714ae28343c61b6c4d3
+              name: 'PowerNet-MIB::ePDUDeviceStatusFrequency[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.1.1.12.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.1.1.12.[{#SNMPINDEX}]'
+              delay: 5m
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              units: Hz
+              description: |
+                Indicates the PDU Frequency. Units:0.001 Hz.
+                 Models that do not support this feature, will respond to this OID
+                 with a value of notSupported (-1).
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.001'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: 6099b13480c848f189c27464db915f5e
+          name: 'PowerNet-MIB::ePDUDeviceControlTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5]'
+          key: .1.3.6.1.4.1.318.1.1.30.2.2
+          delay: '120'
+          description: 'A table of Easy PDU control data'
+          item_prototypes:
+            - uuid: c33ee996ee864181a4a5394ab42cdfc5
+              name: 'PowerNet-MIB::ePDUDeviceControlModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.2.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.2.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The user-defined Easy PDU numeric ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 2a2c06862593411a934c45cc695e027f
+              name: 'PowerNet-MIB::ePDUDeviceControlReboot[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.2.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.2.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Setting this OID to reboot (1) will cause the device reboot immediately.\r Getting this OID in models that support this feature will do nothing and\r return the noOperation(0) value."
+              valuemap:
+                name: 'PowerNet-MIB::ePDUDeviceControlReboot'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: eadbe616a99e42ca80876bb3d18e6243
+              name: 'PowerNet-MIB::ePDUDeviceControlEngeryReset[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.2.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.2.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Setting this OID to reboot (1) will cause the device reboot immediately.\r Getting this OID in models that support this feature will do nothing and\r return the noOperation(0) value."
+              valuemap:
+                name: 'PowerNet-MIB::ePDUDeviceControlEngeryReset'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: d98d626ed84b4aab974c6dbeda391f64
+              name: 'PowerNet-MIB::ePDUDeviceControlBeepAlarm[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.2.2.1.5.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.2.2.1.5.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Beep alarm, 1 for turn off Beep, 2 for turn on Beep.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              valuemap:
+                name: 'PowerNet-MIB::ePDUDeviceControlBeepAlarm'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: 2876b5a18e1e45dd8f685741c4a76a81
+          name: 'PowerNet-MIB::ePDUPhaseConfigTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4,{#EPDUDEVICESTATUSMODULE},.1.3.6.1.4.1.318.1.1.30.2.1.1.2]'
+          key: .1.3.6.1.4.1.318.1.1.30.4.1
+          delay: '120'
+          description: 'A table of Easy PDU phase configuration data'
+          item_prototypes:
+            - uuid: 46c03f77fb2d4a6bac92adb2d8d5f68f
+              name: 'PowerNet-MIB::ePDUPhaseConfigModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.1.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.1.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The user-defined Easy PDU numeric ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 0aec1964e31b441992bf6953ca4ee083
+              name: 'PowerNet-MIB::ePDUPhaseConfigNumber[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.1.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.1.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The numeric phase ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 6c30e46a9c6847abb666189b19ece909
+              name: 'PowerNet-MIB::ePDUPhaseConfigOverVoltageThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.1.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.1.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Phase Over Voltage alarm threshold. Units:0.1 V.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: dc77ca6627044b728b1d1e0244532c1b
+              name: 'PowerNet-MIB::ePDUPhaseConfigLowVoltageThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.1.1.5.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.1.1.5.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Phase Low Voltage alarm threshold. Units:0.1 V.\r Models that do not support this feature will\r respond to this OID with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: ba487b19fcbc4759a58e62d08cb7074b
+              name: 'PowerNet-MIB::ePDUPhaseConfigOverCurrentThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.1.1.6.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.1.1.6.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Phase Over Current alarm threshold. Units:0.01 A.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: f29e4931d4564e9ca952c33d27ead8de
+              name: 'PowerNet-MIB::ePDUPhaseConfigLowCurrentThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.1.1.7.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.1.1.7.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Phase Low Current alarm threshold. Units:0.01 A.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: fe3421baa865414794bf616b1e6f370f
+          name: 'PowerNet-MIB::ePDUPhaseStatusTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4,{#EPDUDEVICESTATUSMODULE},.1.3.6.1.4.1.318.1.1.30.2.1.1.2]'
+          key: .1.3.6.1.4.1.318.1.1.30.4.2
+          delay: '120'
+          description: 'A table of Rack PDU phase status data'
+          item_prototypes:
+            - uuid: 3fe39f102cbf4a128b9890f9673944f6
+              name: 'PowerNet-MIB::ePDUPhaseStatusModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The user-defined Easy PDU numeric ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 8ff3b37cdb574edb9df9931f79269e22
+              name: 'PowerNet-MIB::ePDUPhaseStatusNumber[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The numeric phase ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 2084dd8bf4684afeb3542834ac892a47
+              name: 'PowerNet-MIB::ePDUPhaseStatusVoltage[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.4.[{#SNMPINDEX}]'
+              delay: 5m
+              history: 2w
+              value_type: FLOAT
+              units: v
+              description: 'Indicates the Phase Voltage. Units:0.1 V'
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.1'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: d03b96b2986c43b8983a600690b46c5c
+              name: 'PowerNet-MIB::ePDUPhaseStatusCurrent'
+              type: SNMP_AGENT
+              snmp_oid: .1.3.6.1.4.1.318.1.1.30.4.2.1.5.1
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.5.1[{#SNMPINDEX}]'
+              delay: 5m
+              history: 2w
+              value_type: FLOAT
+              units: A
+              description: 'Indicates the Phase Current. Units:0.01 A'
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: f7ed7d6c601b4e638366be8fb7cd7969
+              name: 'PowerNet-MIB::ePDUPhaseStatusCurrent[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.5.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.5.[{#SNMPINDEX}]'
+              delay: 5m
+              history: 2w
+              value_type: FLOAT
+              units: A
+              description: 'Indicates the Phase Current. Units:0.01 A'
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.01'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: f6e4f3010b8a4395911b121aa84b45bb
+              name: 'PowerNet-MIB::ePDUPhaseStatusActivePower[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.6.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.6.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'Indicates the Phase Active Power. Units:1 Watt'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 5959fd9ad9184c68b76959942ed8e5e1
+              name: 'PowerNet-MIB::ePDUPhaseStatusReactivePower[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.7.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.7.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Indicates the Phase Reactive Power. Units:1 Var.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 94fa2ee65f814f1686a27eb89a98e010
+              name: 'PowerNet-MIB::ePDUPhaseStatusApparentPower[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.8.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.8.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Indicates the Phase Apparent Power. Units:1 VA.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 42e1ea3588fc491cb86aa03db6c5a5ee
+              name: 'PowerNet-MIB::ePDUPhaseStatusPowerFactor[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.9.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.9.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'Indicates the Phase Power Factor. Units:0.1%'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 07b39af05cf94d1e8af289be8e588a63
+              name: 'PowerNet-MIB::ePDUPhaseStatusEnergy[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.4.2.1.10.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.4.2.1.10.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'Indicates the Phase Energy. Units:1 Wh'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: aaba373d2b134661a3ef637b510b774f
+          name: 'PowerNet-MIB::ePDUOutletStatusTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4,{#EPDUDEVICESTATUSMODULE},.1.3.6.1.4.1.318.1.1.30.2.1.1.2]'
+          key: .1.3.6.1.4.1.318.1.1.30.6.1
+          delay: '120'
+          description: 'The number of switched outlets on connected Rack PDUs'
+          item_prototypes:
+            - uuid: 186f7b885ea14c29a374216068773cf8
+              name: 'PowerNet-MIB::ePDUOutletStatusModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.6.1.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.6.1.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "The user-defined Easy PDU numeric ID.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 3f4aec922731462bbb659814bbefc3f3
+              name: 'PowerNet-MIB::ePDUOutletStatusNumber[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.6.1.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.6.1.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "The numeric switched outlet ID.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 2b02d06a78614a7ca15e7b4269eefe74
+              name: 'PowerNet-MIB::ePDUOutletStatusState[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.6.1.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.6.1.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Indicates the present switch state of the Easy PDU switched outlet being queried.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              valuemap:
+                name: 'PowerNet-MIB::ePDUOutletStatusState'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: 60878d8fc96e48da85c7684fe69927db
+          name: 'PowerNet-MIB::ePDUOutletControlTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4,{#EPDUDEVICESTATUSMODULE},.1.3.6.1.4.1.318.1.1.30.2.1.1.2]'
+          key: .1.3.6.1.4.1.318.1.1.30.6.2
+          delay: '120'
+          description: 'A table of Easy PDU switched outlet control data'
+          item_prototypes:
+            - uuid: afba4c7e0c004bf8bf1eec948b702616
+              name: 'PowerNet-MIB::ePDUOutletControlModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.6.2.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.6.2.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "The user-defined Easy PDU numeric ID.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: c25441f922c74fcabfacde41adc541da
+              name: 'PowerNet-MIB::ePDUOutletControlNumber[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.6.2.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.6.2.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "The numeric switched outlet ID.\r Models that do not support this feature, will respond to this OID\r with a value of notSupported (-1)."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: fe72a066947745ad8630018fc034bdb0
+              name: 'PowerNet-MIB::ePDUOutletControlCommand[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.6.2.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.6.2.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "Getting this variable will return the outlet state. If\r the outlet is on, the immediateOn (1) value will be returned.\r If the outlet is off, the immediateOff (2) value will be\r returned. If the state of the outlet cannot be\r determined, the outletUnknown (3) value will be returned.\r If the outletUnknown condition should occur, all devices\r powered by the PDU should be shut down. The PDU\\'s power\r should then be cycled to clear this condition.\r Models that do not support this feature, \r will respond to this OID with a value of notSupported (-1).\r Setting this variable to immediateOn (1) will immediately turn the outlet on.\r Setting this variable to immediateOff (2) will immediately turn the outlet off."
+              valuemap:
+                name: 'PowerNet-MIB::ePDUOutletControlCommand'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: 75a8f69583fc4aa09b4b987ce7e27ab4
+          name: 'PowerNet-MIB::ePDUSensorConfigTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4]'
+          key: .1.3.6.1.4.1.318.1.1.30.8.1
+          delay: '120'
+          description: 'A table of temperature-humidity sensor configuration data'
+          item_prototypes:
+            - uuid: 8c163c1c883f409a94f12c6cb8fac3f9
+              name: 'PowerNet-MIB::ePDUSensorConfigModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.1.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.1.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The user-defined Easy PDU numeric ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 216085392ae141489d0a431804161a7e
+              name: 'PowerNet-MIB::ePDUSensorConfigTempMaxThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.1.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.1.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Max Temperature alarm threshold. Units: 0.1 degrees Celsius.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 610077b9d90f439d8f33b3399b07c5a3
+              name: 'PowerNet-MIB::ePDUSensorConfigTempMinThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.1.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.1.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Min Temperature alarm threshold. Units: 0.1 degrees Celsius.\r Models that do not support this feature will\r respond to this OID with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: c89a44a28b6b48d8b9284dd7f9aa0e0c
+              name: 'PowerNet-MIB::ePDUSensorConfigHumidityMaxThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.1.1.5.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.1.1.5.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Max Humidity alarm threshold. Units: 0.1% relative humidity.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 4a043e537a39455db32e293b3a216975
+              name: 'PowerNet-MIB::ePDUSensorConfigHumidityMinThreshold[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.1.1.6.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.1.1.6.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: "User-defined Min Humidity alarm threshold. Units: 0.1% relative humidity.\r Models that do not support this feature will respond to this OID\r with a value of -1."
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+        - uuid: 0adf7932f402420aa0649e1465640cf2
+          name: 'PowerNet-MIB::ePDUSensorStatusTable'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#EPDUDEVICECONTROLMODULE},.1.3.6.1.4.1.318.1.1.30.2.2.1.2,{#EPDUDEVICECONTROLREBOOT},.1.3.6.1.4.1.318.1.1.30.2.2.1.3,{#EPDUDEVICECONTROLENGERYRESET},.1.3.6.1.4.1.318.1.1.30.2.2.1.4,{#EPDUDEVICECONTROLBEEPALARM},.1.3.6.1.4.1.318.1.1.30.2.2.1.5,{#EPDUSENSORCONFIGMODULE},.1.3.6.1.4.1.318.1.1.30.8.1.1.2,{#EPDUSENSORCONFIGTEMPMAXTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.3,{#EPDUSENSORCONFIGTEMPMINTHRESHOLD},.1.3.6.1.4.1.318.1.1.30.8.1.1.4,{#EPDUDEVICESTATUSMODULE},.1.3.6.1.4.1.318.1.1.30.2.1.1.2]'
+          key: .1.3.6.1.4.1.318.1.1.30.8.2
+          delay: '120'
+          description: 'A table of temperature-humidity sensor status data'
+          item_prototypes:
+            - uuid: 47bd617ec33f46978534922f44a29394
+              name: 'PowerNet-MIB::ePDUSensorStatusModule[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.2.1.2.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.2.1.2.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'The user-defined Easy PDU numeric ID'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 7f62f7a7dff944a3857c539f164b1d08
+              name: 'PowerNet-MIB::ePDUSensorStatusTemperature[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.2.1.3.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.2.1.3.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'Sensor temperature reading in tenths of degrees Celsius.'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+            - uuid: 086c8e2ab82d4800a4698c61e0185415
+              name: 'PowerNet-MIB::ePDUSensorStatusHumidity[{#SNMPINDEX}]'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.318.1.1.30.8.2.1.4.{#SNMPINDEX}'
+              key: '.1.3.6.1.4.1.318.1.1.30.8.2.1.4.[{#SNMPINDEX}]'
+              delay: 1h
+              history: 2w
+              trends: '0'
+              value_type: FLOAT
+              description: 'Sensor humidity reading in 0.1 percent relative humidity.'
+              tags:
+                - tag: Application
+                  value: APC_ePDU
+      macros:
+        - macro: '{$SNMP_COMMUNITY}'
+          value: public
+        - macro: '{$SNMP_PORT}'
+          value: '161'
+      valuemaps:
+        - uuid: 413d49537a5f4f6396596fef5a123400
+          name: 'PowerNet-MIB::ePDUDeviceControlBeepAlarm'
+          mappings:
+            - value: '1'
+              newvalue: 'off'
+            - value: '2'
+              newvalue: 'on'
+        - uuid: 7e5e82d8f5b34b29868d9f9aea914c05
+          name: 'PowerNet-MIB::ePDUDeviceControlEngeryReset'
+          mappings:
+            - value: '0'
+              newvalue: noOperation
+            - value: '1'
+              newvalue: reset
+        - uuid: c659513cbdf941149da9901d3061b001
+          name: 'PowerNet-MIB::ePDUDeviceControlReboot'
+          mappings:
+            - value: '0'
+              newvalue: noOperation
+            - value: '1'
+              newvalue: reboot
+        - uuid: c361d6bed8604895b2d36231ffeb037a
+          name: 'PowerNet-MIB::ePDUOutletControlCommand'
+          mappings:
+            - value: '1'
+              newvalue: immediateOn
+            - value: '2'
+              newvalue: immediateOff
+            - value: '3'
+              newvalue: outletUnknown
+        - uuid: a10fb3e40a4b4727adcf85e39b209dac
+          name: 'PowerNet-MIB::ePDUOutletStatusState'
+          mappings:
+            - value: '1'
+              newvalue: 'off'
+            - value: '2'
+              newvalue: 'on'
