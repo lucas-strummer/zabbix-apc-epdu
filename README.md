@@ -7,8 +7,11 @@ Funciona con el modelo EPDU1132M (Easy Rack PDU), posiblemente se pueda utilizar
 
 
 ## Modo de uso
-.- Dirigirse a Templates dentro de Zabbix.
-.- Click en Import y seleccionar el archivo según la versión.
+- Dirigirse a Templates dentro de Zabbix.
+
+- Click en Import y seleccionar el archivo según la versión.
+
+ 
  * Cambiar el SNMP Community en las macro de ser necesario.
 
 
